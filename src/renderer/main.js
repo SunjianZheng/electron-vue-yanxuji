@@ -29,8 +29,8 @@ Vue.use(VueAMap);
 Vue.use(VueAxios, axios);
 
 Vue.use(VueLazyload, {
-  // error: 'src/renderer/assets/error.png',
-  loading: 'src/renderer/assets/loading.gif',
+  // error: require('./assets/error.png'),
+  loading: require('./assets/loading.gif'),
   try: 2,
 });
 
