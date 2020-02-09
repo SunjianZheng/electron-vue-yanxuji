@@ -44,7 +44,7 @@ export default {
   methods: {
     linkToGitHub() {
       // eslint-disable-next-line
-      shell.openExternal('https://github.com/SunjianZheng/yanxuji');
+      shell.openExternal('hhttps://github.com/SunjianZheng/electron-vue-yanxuji');
     },
     back() {
       this.$router.back(-1);
