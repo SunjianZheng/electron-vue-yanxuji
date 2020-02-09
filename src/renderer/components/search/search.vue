@@ -42,7 +42,7 @@
                     <!-- </div> -->
                     <!-- <router-link v-if="imgArr[index]" :to="{path: '/photoDetails', query:{name: item.split('/')[4]}}"> -->
                     <router-link v-if="imgArr[index]" :to="{path: '/photoDetails', query:{name: item.split('/')[4]}}">
-                      <img :src="item" class="imgItem" alt />
+                      <img v-lazy="item" class="imgItem" alt />
                     </router-link>
                   </div>
                 </div>
@@ -95,22 +95,31 @@ export default {
     updateStatus(e) {
       const { type } = e;
       this.isOnline = type === 'online';
-      // if (this.isOnline) {
-      //   this.getAlbum();
-      // }
     },
     search() {
-      // if (this.query.length !== 0) {
-      this.loading = true;
-      // }
+      this.imgArr = [];
+      // eslint-disable-next-line
+      this.query.length ? this.loading = true : false;
+
       this.axios.get(`${this.$apiPrefix}/search?key=${encodeURIComponent(this.query)}`)
         .then((res) => {
           this.imgArr = res.data;
           this.loading = false;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          this.loading = false;
+          this.openAlert();
         });
+    },
+    openAlert() {
+      this.$message({
+        title: '警告',
+        // message: `${msg}, 搜寻无结果!`,
+        message: '搜寻无结果!',
+        type: 'warning',
+        offset: 320,
+        center: true,
+      });
     },
     back() {
       this.$router.back(-1);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import ElementUI from 'element-ui';
 import VueAMap from 'vue-amap';
+import VueLazyload from 'vue-lazyload';
 import 'element-ui/lib/theme-chalk/index.css';
 import 'font-awesome/css/font-awesome.css';
 
@@ -27,6 +28,11 @@ Vue.use(ElementUI);
 Vue.use(VueAMap);
 Vue.use(VueAxios, axios);
 
+Vue.use(VueLazyload, {
+  // error: 'src/renderer/assets/error.png',
+  loading: 'src/renderer/assets/loading.gif',
+  try: 2,
+});
 
 /* eslint-disable no-new */
 new Vue({

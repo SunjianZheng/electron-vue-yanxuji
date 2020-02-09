@@ -6,11 +6,7 @@
             <nav-bar></nav-bar>
           </keep-alive>
         </el-aside>
-        <el-main
-          v-loading="loading"
-          element-loading-text="加载中..."
-          element-loading-spinner="el-icon-loading"
-        >
+        <el-main>
           <el-container>
             <el-container class="style">
               <el-header style="text-align: right; font-size: 12px">
@@ -34,14 +30,19 @@
                 </div>
               </el-header>
 
-              <el-main class="waterFallMain">
+              <el-main
+                v-loading="loading"
+                element-loading-text="加载中..."
+                element-loading-spinner="el-icon-loading"
+                class="waterFallMain"
+              >
                 <div class="masonry">
                   <div v-for="(item, index) in imgArr" :key="index" class="item">
                     <div v-show="showOrNot" @click="deleteFromAlbum(imgArr[index])" class="delete">
                       <i class="el-icon-delete"></i>
                     </div>
                     <router-link v-if="imgArr[index]" :to="{path: '/photoDetails', query:{name: item.split('/')[4]}}">
-                      <img :src="item" class="imgItem" alt />
+                      <img v-lazy="item" class="imgItem" alt @load="handleLoad" />
                     </router-link>
                   </div>
                 </div>
@@ -86,6 +87,9 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    handleLoad() {
+      // this.loading = false;
     },
     showIcons(e) {
       e.preventDefault();

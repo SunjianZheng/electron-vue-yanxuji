@@ -36,7 +36,7 @@
 	  -webkit-user-select:none;
 	  user-select:none;
     /* font-family: Microsoft Yahei; */
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","????",Arial,sans-serif;
   }
   
   ::-webkit-scrollbar { 
@@ -50,6 +50,20 @@
   textarea{
     -webkit-user-select:auto;
   }
+
+  /* .el-loading-spinner .circular{
+    width: 48px;
+    height: 48px;
+    animation: loading-rotate 2s linear infinite;
+    display: none;
+  }
+  .el-loading-spinner{
+    background: url('assets/loading.gif') no-repeat;
+    width: 100%;
+    height: 100%;
+    top: 20%;
+    left: 20%;
+  } */
 
   .el-loading-spinner > .el-icon-loading,
   .el-loading-spinner > .el-loading-text {
@@ -77,6 +91,11 @@
     max-width: 360px;
     max-height: 202px;
     border-radius: 5px;
+  }
+
+  .el-message {
+    top: 310px;
+    left: 650px;
   }
 
   /* fade */

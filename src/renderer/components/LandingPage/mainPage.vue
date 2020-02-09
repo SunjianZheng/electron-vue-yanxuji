@@ -32,7 +32,7 @@
                 class="linkToPhotoCollections"
               >
                 <div class="wrapper">
-                  <img :src="items.avatar" class="image" />
+                  <img v-lazy="items.avatar" class="image" />
                   <!-- <el-image
                     style="width: 100%; height: 100%;"
                     :lazy="true"

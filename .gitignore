@@ -65,3 +65,6 @@ build/win-unpacked/
 
 # exe
 *.exe
+
+# .lock
+*.lock
