@@ -40,7 +40,7 @@ export default {
   components: { NavBar },
   data() {
     return {
-      url: `${this.$apiPrefix}/uploadImg?id=${this.$route.query.id}`,
+      url: `${this.$apiPrefix}/uploadImg?name=${window.encodeURIComponent(this.$route.query.name)}`,
       dialogImageUrl: '',
       dialogVisible: false,
     };

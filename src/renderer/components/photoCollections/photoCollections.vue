@@ -19,7 +19,7 @@
                   <el-dropdown>
                     <i class="el-icon-setting"></i>
                     <el-dropdown-menu slot="dropdown">
-                      <router-link :to="{path: '/upload', query:{id: query}}" class="linkToUpload">
+                      <router-link :to="{path: '/upload', query:{name: albumName}}" class="linkToUpload">
                         <el-dropdown-item>新增</el-dropdown-item>
                       </router-link>
                       <el-dropdown-item @click.native="showIcons">删除</el-dropdown-item>
@@ -79,7 +79,7 @@ export default {
       // eslint-disable-next-line
       const query = this.query;
       // this.axios.get(`${this.$apiPrefix}/getOriginalImg?id=${query}`)
-      this.axios.get(`${this.$apiPrefix}/getCompressedImg?id=${query}`)
+      this.axios.get(`${this.$apiPrefix}/getCompressedImg?name=${window.encodeURIComponent(this.albumName)}`)
         .then((res) => {
           this.imgArr = res.data;
           this.loading = false;
