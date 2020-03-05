@@ -65,6 +65,21 @@
     left: 20%;
   } */
 
+  /* .el-upload-list__item{
+    text-align: center;
+  } */
+  .el-upload-list--picture-card /deep/ .el-upload-list__item-thumbnail {
+    /* width: auto;
+    height: 100%; */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .v-modal {
+    background: none;
+  }
+
   .el-loading-spinner > .el-icon-loading,
   .el-loading-spinner > .el-loading-text {
     color: #FB966E;

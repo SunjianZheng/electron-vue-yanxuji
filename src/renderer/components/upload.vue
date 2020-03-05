@@ -25,8 +25,11 @@
         >
           <i class="el-icon-plus"></i>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="dialogImageUrl" alt="">
+        <el-dialog
+          :visible.sync="dialogVisible"
+          :modal-append-to-body='false'
+        >
+          <img :src="dialogImageUrl" style="height: 83vh; width: 100%; object-fit: contain" alt="">
         </el-dialog>
       </el-main>
     </el-container>
@@ -104,4 +107,14 @@ header {
     font-size: 24px;
     padding-right: 10px;
 }
+
+  .el-dialog__wrapper /deep/ .el-dialog {
+    width: 75vw !important;
+    height: 100vh !important;
+    margin-top: 0 !important;
+    float: right !important;
+  }
+  .el-dialog /deep/ .el-dialog__body {
+    text-align: center !important;
+  }
 </style>
