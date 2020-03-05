@@ -66,5 +66,8 @@ build/win-unpacked/
 # exe
 *.exe
 
+# exe.blockmap
+*.exe.blockmap
+
 # .lock
 *.lock

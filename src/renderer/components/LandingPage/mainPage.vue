@@ -117,13 +117,24 @@ export default {
         .then(async (res) => {
           if (res.status === 200 && res.data === 1) {
             await this.getAlbum();
+            await this.updateAlbumID();
             this.loading = false;
           } else {
             console.error('delete failed');
           }
         })
         .catch((err) => {
-          console.error(err);
+          console.error(err.message);
+        });
+    },
+    async updateAlbumID() {
+      this.axios
+        .post(`${this.$apiPrefix}/updateAlbumID`)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.error(err.message);
         });
     },
   },
