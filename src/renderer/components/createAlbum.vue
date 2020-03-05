@@ -58,15 +58,24 @@ export default {
         },
       })
         .then((res) => {
+          this.linkToUpload();
           console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
-      this.$router.back(-1);
+      // this.$router.back(-1);
     },
     reset() {
       this.$refs.formLabelAlign.resetFields();
+    },
+    linkToUpload() {
+      this.$router.push({
+        path: '/upload',
+        query: {
+          name: this.formLabelAlign.name,
+        },
+      });
     },
     back() {
       this.$router.back(-1);
