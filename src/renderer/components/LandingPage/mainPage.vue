@@ -1,18 +1,20 @@
 <template>
   <el-container class="style">
-    <el-header style="text-align: right; font-size: 12px">
+    <el-header style="text-align: right; font-size: 12px; margin-bottom: 5px;">
       <header>
         <!-- <div>册集</div> -->
         <div class="settingButtons">
           <el-dropdown>
-            <i class="el-icon-setting"></i>
+            <!-- <i class="el-icon-setting"></i> -->
+            <span class="el-dropdown-link">
+              菜单<i class="el-icon-setting el-icon--right"></i>
+            </span>
             <el-dropdown-menu slot="dropdown">
               <router-link to="/createAlbum" class="linkToCreateAlbum">
-                <el-dropdown-item>新增</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-plus">新增</el-dropdown-item>
               </router-link>
-              <el-dropdown-item @click.native="showIcons">删除</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="showIcons">删除</el-dropdown-item>
             </el-dropdown-menu>
-            <span>设置</span>
           </el-dropdown>
           <i v-show="showOrNot" @click="hideIcons" class="el-icon-circle-check"></i>
         </div>
@@ -28,7 +30,15 @@
         <el-col :span="8" v-for="(items, index) of albums" :key="index" :offset="index > 0 ? 6 : 0">
             <el-card :body-style="{ padding: '0px' }" shadow="hover">
               <router-link
-                :to="{path: '/photoCollections', query:{id: items.id, name: items.name}}"
+                :to="{
+                  path: '/photoCollections',
+                  query:{
+                    id: items.id,
+                    name: items.name,
+                    avatar: items.avatar,
+                    type: items.type,
+                    describe: items.describe}
+                  }"
                 class="linkToPhotoCollections"
               >
                 <div class="wrapper">
@@ -165,6 +175,7 @@ header {
   float: right;
   padding-top: 20px;
   margin-right: 20px;
+  -webkit-app-region: no-drag;
 }
 
 .el-main {
@@ -236,11 +247,13 @@ header {
   display: flex;
   float: right;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .el-icon-circle-check {
-  padding-top: 22px;
+  padding-top: 24px;
   color: green;
+  -webkit-app-region: no-drag;
 }
 
 .item {

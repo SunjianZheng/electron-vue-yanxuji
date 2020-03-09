@@ -1,14 +1,7 @@
 <template>
-  <el-container>
-    <el-aside style="width: 250px;">
-      <keep-alive>
-        <nav-bar></nav-bar>
-      </keep-alive>
-    </el-aside>
     <el-container class="style">
       <el-header>
         <header>
-          <!-- <i @click="back" class="fa fa-chevron-left" aria-hidden="true"></i> -->
           <i @click="back" class="el-icon-arrow-left">上传</i>
         </header>
       </el-header>
@@ -21,7 +14,11 @@
           :auto-upload="true"
           list-type="picture-card"
           :on-preview="handlePictureCardPreview"
-          style="padding: 10px 20px;"
+          style="
+            padding: 10px 20px;
+            width: 51vw;
+            height: 90vh;
+            text-align: center;"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -33,14 +30,11 @@
         </el-dialog>
       </el-main>
     </el-container>
-  </el-container>
 </template>
 
 <script>
-import NavBar from './navBar/navBar';
 
 export default {
-  components: { NavBar },
   data() {
     return {
       url: `${this.$apiPrefix}/uploadImg?name=${window.encodeURIComponent(this.$route.query.name)}`,
@@ -67,7 +61,7 @@ export default {
 .el-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 header {
@@ -83,6 +77,9 @@ header {
 
 .el-main{
   padding: 5px;
+      display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .offline {
@@ -104,7 +101,7 @@ header {
 .el-icon-arrow-left {
     float: left;
     line-height: 42px;
-    font-size: 24px;
+    font-size: 20px;
     padding-right: 10px;
 }
 

@@ -1,13 +1,5 @@
 <template>
   <div id="search-page">
-      <el-container>
-        <el-aside width="250px">
-          <keep-alive>
-            <nav-bar></nav-bar>
-          </keep-alive>
-        </el-aside>
-        <el-main>
-          <el-container>
             <el-container class="style">
               <el-header style="text-align: right; font-size: 12px">
                 <header>
@@ -42,7 +34,13 @@
                     <!-- </div> -->
                     <!-- <router-link v-if="imgArr[index]" :to="{path: '/photoDetails', query:{name: item.split('/')[4]}}"> -->
                     <router-link v-if="imgArr[index]" :to="{path: '/photoDetails', query:{name: item.split('/')[4]}}">
-                      <img v-lazy="item" class="imgItem" alt />
+                      <!-- <img v-lazy="item" class="imgItem" alt /> -->
+                      <el-card :body-style="{ padding: '10px' }" shadow="hover">
+                        <!-- <div v-show="showOrNot" @click="deleteFromAlbum(imgArr[index])" class="delete">
+                          <i class="el-icon-delete"></i>
+                        </div> -->
+                        <img v-lazy="item" class="imgItem" alt @load="handleLoad" />
+                      </el-card>
                     </router-link>
                   </div>
                 </div>
@@ -52,24 +50,19 @@
                 <p style="color: #CB1B45;">网络无连接</p>
               </el-main>
             </el-container>
-          </el-container>
-        </el-main>
-      </el-container>
    </div>
 </template>
 
 <script>
-import NavBar from './../navBar/navBar';
 const debounce = (() => {
-  let timer = 0;
-  return function (func, delay) {
+  let timer = 500;
+  return (func, delay) => {
     clearTimeout(timer);
     timer = setTimeout(func, delay);
   };
 })();
 export default {
   name: 'search-page',
-  components: { NavBar },
   data() {
     return {
       isOnline: navigator.onLine,
@@ -88,7 +81,7 @@ export default {
     query() {
       debounce(() => {
         this.search();
-      }, 200);
+      }, 500);
     },
   },
   methods: {
@@ -99,17 +92,19 @@ export default {
     search() {
       this.imgArr = [];
       // eslint-disable-next-line
-      this.query.length ? this.loading = true : false;
+      this.query.trim().length ? this.loading = true : false;
 
-      this.axios.get(`${this.$apiPrefix}/search?key=${encodeURIComponent(this.query)}`)
-        .then((res) => {
-          this.imgArr = res.data;
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
-          this.openAlert();
-        });
+      if (this.query.trim()) {
+        this.axios.get(`${this.$apiPrefix}/search?key=${encodeURIComponent(this.query.trim())}`)
+          .then((res) => {
+            this.imgArr = res.data;
+            this.loading = false;
+          })
+          .catch(() => {
+            this.loading = false;
+            this.openAlert();
+          });
+      }
     },
     openAlert() {
       this.$message({
@@ -140,11 +135,10 @@ export default {
 .el-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 header {
-  font-size: 30px;
   text-align: center;
 }
 
@@ -177,7 +171,7 @@ header {
 .el-icon-arrow-left {
     float: left;
     line-height: 42px;
-    font-size: 24px;
+    font-size: 20px;
     padding-right: 10px;
 }
 

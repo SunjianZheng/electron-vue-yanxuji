@@ -1,10 +1,5 @@
 <template>
   <el-container>
-    <el-aside style="width: 250px;">
-      <keep-alive>
-        <nav-bar></nav-bar>
-      </keep-alive>
-    </el-aside>
     <el-container class="style">
       <!-- <el-header>
         <header>
@@ -13,7 +8,7 @@
       </el-header> -->
       <el-main>
         <el-card :body-style="{ padding: '0px' }">
-          <img src="./../../assets/logo.png" class="image" style="padding: 10px;">
+          <img src="./../../assets/logo1.png" class="image" style="padding: 10px;">
           <div style="padding: 14px; text-align: center;">
             <div class="bottom clearfix">
               <p class="intro" style="padding: 0 10px 10px 10px;">炎序之意为盛夏</p>
@@ -32,11 +27,9 @@
 </template>
 
 <script>
-import NavBar from './../navBar/navBar';
 const { shell } = require('electron');
 
 export default {
-  components: { NavBar },
   data() {
     return {
     };

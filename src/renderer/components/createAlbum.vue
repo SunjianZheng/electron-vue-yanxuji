@@ -1,11 +1,4 @@
 <template>
-  <el-container>
-    <el-aside style="width: 250px;">
-      <keep-alive>
-        <nav-bar></nav-bar>
-      </keep-alive>
-    </el-aside>
-
     <el-container class="style">
       <el-header>
         <header>
@@ -30,14 +23,11 @@
         </el-form>
       </el-main>
     </el-container>
-  </el-container>
 </template>
 
 <script>
-import NavBar from './navBar/navBar';
 
 export default {
-  components: { NavBar },
   data() {
     return {
       labelPosition: 'right',
@@ -89,6 +79,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  align-items: flex-end;
 }
 
 header {
@@ -121,7 +112,7 @@ header {
 .el-icon-arrow-left {
     float: left;
     line-height: 42px;
-    font-size: 24px;
+    font-size: 20px;
     padding-right: 10px;
 }
 .el-form {

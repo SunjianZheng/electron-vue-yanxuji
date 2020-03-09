@@ -2,7 +2,8 @@ import {
   app,
   BrowserWindow,
   Menu,
-} from 'electron' // eslint-disable-line
+  ipcMain,
+} from 'electron';
 
 /**
  * Set `__static` path to static files in production
@@ -29,6 +30,7 @@ function createWindow() {
     resizable: false,
     skipTaskbar: false,
     autoHideMenuBar: true,
+    frame: false,
     title: '炎序集',
   });
   mainWindow.loadURL(winURL);
@@ -52,6 +54,15 @@ app.on('activate', () => {
     createWindow();
   }
 });
+ipcMain.on('min', () => mainWindow.minimize());
+// ipcMain.on('max', () => {
+//   if (mainWindow.isMaximized()) {
+//     mainWindow.unmaximize();
+//   } else {
+//     mainWindow.maximize();
+//   }
+// });
+ipcMain.on('close', () => mainWindow.close());
 
 /**
  * Auto Updater

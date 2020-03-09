@@ -4,19 +4,28 @@
     <!-- <keep-alive>
       <router-view></router-view>
     </keep-alive> -->
-    <transition name="fade-transform" mode="out-in">
-      <router-view></router-view>
-      <!-- <keep-alive>
-          <router-view v-if="$route.meta.keepAlive"></router-view>
-      </keep-alive>
-      <router-view v-if="!$route.meta.keepAlive"></router-view> -->
-    </transition>
+    <el-container>
+      <el-aside width="25%" style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);">
+        <!-- <keep-alive> -->
+          <nav-bar></nav-bar>
+        <!-- </keep-alive> -->
+      </el-aside>
+      <el-main>
+        <el-container>
+          <transition name="fade-transform" mode="out-in">
+            <router-view></router-view>
+          </transition>
+        </el-container>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
+  import NavBar from './components/navBar/navBar';
   export default {
     name: 'yanxuji',
+    components: { NavBar },
     data() {
       return {
       };
@@ -49,6 +58,16 @@
 
   textarea{
     -webkit-user-select:auto;
+  }
+
+  .el-header {
+    -webkit-app-region: drag;
+  }
+
+  .el-header > header,
+  .el-header > .settingButtons >
+  .el-dropdown, .el-header > .settingButtons > i{
+    -webkit-app-region: no-drag;
   }
 
   /* .el-loading-spinner .circular{

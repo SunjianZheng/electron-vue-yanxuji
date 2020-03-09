@@ -1,10 +1,5 @@
 <template>
   <el-container>
-    <el-aside style="width: 250px;">
-      <keep-alive>
-        <nav-bar></nav-bar>
-      </keep-alive>
-    </el-aside>
     <el-container class="style">
       <el-header>
         <header>
@@ -39,10 +34,8 @@
 </template>
 
 <script>
-import NavBar from './../navBar/navBar';
 
 export default {
-  components: { NavBar },
   data() {
     return {
       isOnline: navigator.onLine,
@@ -108,7 +101,7 @@ export default {
 .el-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 header {
@@ -138,7 +131,7 @@ header {
 .el-icon-arrow-left {
     float: left;
     line-height: 42px;
-    font-size: 24px;
+    font-size: 20px;
     padding-right: 10px;
 }
 
@@ -147,11 +140,12 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
+  height: 100vh;
 }
 
 .waterFallMain {
   padding: 0;
+  height: 0;
 }
 
 .imgItem {

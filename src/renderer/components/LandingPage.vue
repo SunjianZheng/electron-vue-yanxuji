@@ -1,31 +1,15 @@
 <template>
   <div id="app">
-    <!-- <el-container> -->
-      <el-container>
-        <el-aside width="250px">
-          <!-- 侧边栝 -->
-          <keep-alive>
-            <nav-bar></nav-bar>
-          </keep-alive>
-        </el-aside>
-        <el-main>
-          <!-- Body -->
-          <el-container>
-            <main-page></main-page>
-          </el-container>
-        </el-main>
-      </el-container>
-    <!-- </el-container> -->
+      <main-page></main-page>
    </div>
 </template>
 
 <script>
 import MainPage from './LandingPage/MainPage';
-import NavBar from './navBar/navBar';
 
 export default {
   name: 'landing-page',
-  components: { NavBar, MainPage },
+  components: { MainPage },
   methods: {
   },
 };

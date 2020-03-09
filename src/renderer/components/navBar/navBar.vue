@@ -1,9 +1,14 @@
 <template>
   <div class="navBar">
     <el-container>
-      <el-row class="tac">
+      <!-- <el-row class="tac"> -->
       <el-col :span="12">
-        <el-menu default-active="1" class="el-menu-vertical-demo">
+        <div class="btnGroup">
+          <TitleButton type="min" />
+          <TitleButton type="max" />
+          <TitleButton type="close" />
+        </div>
+        <el-menu default-active="1" class="el-menu-vertical" style="width: 25vw">
           <img class="logo" src="./../../assets/logo.png" alt="">
           <!-- <el-submenu index="1"> -->
             <!-- <template slot="title">
@@ -49,26 +54,34 @@
              </router-link>
           </el-menu-item>
         </el-menu>
+        <div class="background"></div>
       </el-col>
-    </el-row>
+    <!-- </el-row> -->
     </el-container>
   </div>
 </template>
 
 <style scoped>
+  .btnGroup {
+    width: 100%;
+    height: 30px;
+    -webkit-app-region: drag;
+    cursor: pointer;
+  }
   .link{
     display: block;
-    color: black;
+    color: inherit;
   }
-  i {
-    color: #909399 !important;
-  }
+  /* i {
+    color: #ED784A;
+  } */
   .navBar{
-    height: 96vh;
+    height: 100vh;
   }
   .logo{
     width: 100%;
     padding: 15px;
+    margin-top: 30px;
   }
   .el-row{
     height: 100%;
@@ -79,6 +92,19 @@
   }
   .el-menu {
     height: 100%;
+    background: rgba(0,0,0,0);
+    border: none;
+  }
+  .background {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-image: url('./../../assets/background.jpg');
+    filter: blur(150px);
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   .el-submenu .el-menu-item {
     height: 100%;
@@ -86,13 +112,22 @@
     padding: 0 45px;
     min-width: 200px;
   }
+  .el-menu-item:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  .is-active{
+    color: white;
+  }
 </style>
 
 <script>
+  import TitleButton from './titleButton';
   export default {
+    components: { TitleButton },
     data() {
       return {
         isCollapse: true,
+        path: './../../assets/background.jfif',
       };
     },
   };

@@ -19,7 +19,7 @@ Vue.prototype.$originalImagePathPrefix = 'http://localhost/originalImg';
 Vue.prototype.$compressedImagePathPrefix = 'http://localhost/compressedImg';
 
 VueAMap.initAMapApiLoader({
-  key: '3348d0bbb7075c6e73ac40546c711b21',
+  key: 'YOUR-KEY',
   plugin: ['AMap.Autocomplete', 'AMap.Geocoder', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation'],
   v: '1.4.4',
 });

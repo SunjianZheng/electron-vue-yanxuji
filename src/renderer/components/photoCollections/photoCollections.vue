@@ -1,32 +1,35 @@
 <template>
   <div id="photo-collections">
       <el-container>
-        <el-aside width="250px">
-          <keep-alive>
-            <nav-bar></nav-bar>
-          </keep-alive>
-        </el-aside>
         <el-main>
           <el-container>
             <el-container class="style">
               <el-header style="text-align: right; font-size: 12px">
                 <header>
-                  <!-- <i @click="back" class="fa fa-chevron-left" aria-hidden="true"></i> -->
                   <i @click="back" class="el-icon-arrow-left">{{albumName}}</i>
                 </header>
 
+                <!-- <el-button type="primary" @click="move">move test</el-button>
+                <el-button type="primary" @click="modifyAlbumInfo">modify album test</el-button> -->
+
                 <div class="settingButtons">
+                  <!-- <el-dropdown :hide-on-click="false"> -->
                   <el-dropdown>
-                    <i class="el-icon-setting"></i>
+                    <span class="el-dropdown-link">
+                      菜单<i class="el-icon-setting el-icon--right"></i>
+                    </span>
                     <el-dropdown-menu slot="dropdown">
                       <router-link :to="{path: '/upload', query:{name: albumName}}" class="linkToUpload">
-                        <el-dropdown-item>新增</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-plus">新增</el-dropdown-item>
                       </router-link>
-                      <el-dropdown-item @click.native="showIcons">删除</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-d-arrow-left" @click.native="showMultiSelect">移动</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-setting" @click.native="showForm">变更</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-delete" @click.native="showIcons">删除</el-dropdown-item>
                     </el-dropdown-menu>
-                    <span>设置</span>
                   </el-dropdown>
                   <i v-show="showOrNot" @click="hideIcons" class="el-icon-circle-check"></i>
+                  <i v-show="showFormOrNot" @click="hideForm" class="el-icon-circle-check"></i>
+                  <i v-show="showMultiSelectOrNot" @click="cancle" class="el-icon-circle-close"></i>
                 </div>
               </el-header>
 
@@ -36,13 +39,49 @@
                 element-loading-spinner="el-icon-loading"
                 class="waterFallMain"
               >
+                <div class="albums">
+                  <p
+                    v-for="(items, index) of albums"
+                    @click="hideMultiSelect($event, items.name)"
+                    :key="index"
+                    style="font-size: 11px; padding-top: 15px; cursor: pointer;"
+                  >
+                    <span>{{items.name}}</span>
+                    <el-divider></el-divider>
+                  </p>
+                </div>
+
+                <el-form :inline="true" :model="formInline" size="mini" class="formInline">
+                    <el-form-item label="名称:">
+                      <el-input v-model="formInline.name" placeholder="无"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述:">
+                      <el-input v-model="formInline.describe" placeholder="无"></el-input>
+                    </el-form-item>
+                    <el-form-item label="类型:">
+                      <el-input v-model="formInline.type" placeholder="无"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button @click="modifyAlbumInfo($event, formInline)" type="success" round icon="el-icon-check"></el-button>
+                    </el-form-item>
+                  </el-form>
+
                 <div class="masonry">
                   <div v-for="(item, index) in imgArr" :key="index" class="item">
-                    <div v-show="showOrNot" @click="deleteFromAlbum(imgArr[index])" class="delete">
+                    <!-- <div v-show="showOrNot" @click="deleteFromAlbum(imgArr[index])" class="delete">
                       <i class="el-icon-delete"></i>
-                    </div>
+                    </div> -->
                     <router-link v-if="imgArr[index]" :to="{path: '/photoDetails', query:{name: item.split('/')[4]}}">
-                      <img v-lazy="item" class="imgItem" alt @load="handleLoad" />
+                      <!-- <img v-lazy="item" class="imgItem" alt @load="handleLoad" /> -->
+                      <el-card :body-style="{ padding: '10px' }" shadow="hover">
+                        <div v-show="showOrNot" @click="deleteFromAlbum(imgArr[index])" class="delete">
+                          <i class="el-icon-delete" style="color: #D05A6E; font-size: 32px;"></i>
+                        </div>
+                        <div v-show="showMultiSelectOrNot" @click="addToArray(imgArr[index], index)" class="addToArray">
+                          <i class="el-icon-success" style="color: rgba(0, 0, 0, 0); font-size: 32px;"></i>
+                        </div>
+                        <img v-lazy="item" class="imgItem" alt @load="handleLoad" />
+                      </el-card>
                     </router-link>
                   </div>
                 </div>
@@ -55,38 +94,49 @@
 </template>
 
 <script>
-import NavBar from './../navBar/navBar';
-
 export default {
   name: 'photo-collections',
-  components: { NavBar },
   data() {
     return {
       query: this.$route.query.id,
       albumName: this.$route.query.name,
       imgArr: [],
       tempImgArr: [],
+      needToMove: [],
       showOrNot: false,
+      showMultiSelectOrNot: false,
+      showFormOrNot: false,
+      albums: [],
+      formInline: {
+        name: this.$route.query.name,
+        describe: this.$route.query.describe,
+        type: this.$route.query.type,
+      },
       loading: false,
     };
   },
   created() {
     this.getImgs();
+    this.getAlbum();
   },
   methods: {
     getImgs() {
-      this.loading = true;
-      // eslint-disable-next-line
-      const query = this.query;
-      // this.axios.get(`${this.$apiPrefix}/getOriginalImg?id=${query}`)
-      this.axios.get(`${this.$apiPrefix}/getCompressedImg?name=${window.encodeURIComponent(this.albumName)}`)
-        .then((res) => {
-          this.imgArr = res.data;
-          this.loading = false;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (this.$route.query.imgUrl) {
+        this.imgArr = this.$route.query.imgUrl;
+      } else {
+        this.loading = true;
+        // eslint-disable-next-line
+        const query = this.query;
+        // this.axios.get(`${this.$apiPrefix}/getOriginalImg?id=${query}`)
+        this.axios.get(`${this.$apiPrefix}/getCompressedImg?name=${window.encodeURIComponent(this.albumName)}`)
+          .then((res) => {
+            this.imgArr = res.data;
+            this.loading = false;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     handleLoad() {
       // this.loading = false;
@@ -98,6 +148,33 @@ export default {
     hideIcons(e) {
       e.preventDefault();
       this.showOrNot = false;
+    },
+    showForm(e) {
+      e.preventDefault();
+      this.showFormOrNot = true;
+      document.querySelector('.formInline').style.display = 'inline-flex';
+    },
+    hideForm(e) {
+      e.preventDefault();
+      this.showFormOrNot = false;
+      document.querySelector('.formInline').style.display = 'none';
+    },
+    showMultiSelect(e) {
+      e.preventDefault();
+      this.showMultiSelectOrNot = true;
+      document.querySelector('.albums').style.display = 'block';
+    },
+    hideMultiSelect(e, albumName) {
+      e.preventDefault();
+      this.showMultiSelectOrNot = false;
+      this.move(this.needToMove, albumName);
+      document.querySelector('.albums').style.display = 'none';
+    },
+    cancle(e) {
+      e.preventDefault();
+      this.needToMove = [];
+      this.showMultiSelectOrNot = false;
+      document.querySelector('.albums').style.display = 'none';
     },
     async deleteFromAlbum(url) {
       // eslint-disable-next-line
@@ -121,12 +198,13 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      return false;
     },
     async changeAvatar() {
       const len = this.imgArr.length;
       const url = this.imgArr[len - 2].split('/')[4];
 
-      await this.axios.post(`${this.$apiPrefix}/changeAvatar?id=${this.query}&url=${url}`)
+      await this.axios.post(`${this.$apiPrefix}/changeAvatar?name=${window.encodeURIComponent(this.albumName)}&url=${url}`)
         .then((res) => {
           console.log(res);
         })
@@ -135,12 +213,108 @@ export default {
         });
     },
     async changeAvatarToEmpty() {
-      await this.axios.post(`${this.$apiPrefix}/changeAvatar?id=${this.query}&url=0`)
+      await this.axios.post(`${this.$apiPrefix}/changeAvatar?name=${window.encodeURIComponent(this.albumName)}&url=0`)
         .then((res) => {
           console.log(res);
         })
         .catch((err) => {
           console.error(err);
+        });
+    },
+    async getAlbum() {
+      await this.axios
+        .get(`${this.$apiPrefix}/getAlbum`)
+        .then((res) => {
+          this.albums = res.data.albums;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    addToArray(imgUrl, index) {
+      // eslint-disable-next-line
+      event.preventDefault();
+      // eslint-disable-next-line
+      event.stopPropagation();
+      const classAddToArray = document.querySelectorAll('.addToArray')[index];
+      const checkedIcon = document.querySelectorAll('.el-icon-success')[index];
+
+      if (classAddToArray.classList.contains('checked')) {
+        this.needToMove = this.needToMove.filter(item => item !== imgUrl);
+        classAddToArray.classList.remove('checked');
+        classAddToArray.style.background = 'none';
+        checkedIcon.style.color = 'rgba(0, 0, 0, 0)';
+      } else {
+        this.needToMove.push(imgUrl);
+        classAddToArray.classList.add('checked');
+        classAddToArray.style.background = 'rgba(0, 0, 0, 0.3)';
+        checkedIcon.style.color = 'green';
+      }
+      return false;
+    },
+    async move(urlArr, albumName) {
+      this.loading = true;
+      const len = this.imgArr.length;
+
+      await this.axios.post(`${this.$apiPrefix}/moveImages?urlString=${urlArr}&albumName=${window.encodeURIComponent(albumName)}`)
+        .then(async (res) => {
+          console.log('move -> res', res);
+          if (res.status === 200 && res.data === 1) {
+            if (urlArr.indexOf(this.imgArr[len - 1]) === 0 && len > 1) {
+              await this.changeAvatar();
+            } else if (len === 1) {
+              await this.changeAvatarToEmpty();
+            }
+            await this.getImgs();
+            this.loading = false;
+          }
+          this.loading = false;
+        })
+        .catch((err) => {
+          console.error(err.message);
+          this.loading = false;
+        });
+    },
+    async modifyAlbumInfo(e, obj) {
+      e.preventDefault();
+      const originalInfo = [
+        this.$route.query.name,
+        this.$route.query.describe,
+        this.$route.query.type,
+      ];
+      const info = [];
+      let infoString = '';
+
+      if (originalInfo.indexOf(obj.name) === -1) {
+        info.push({ name: obj.name });
+      }
+      if (originalInfo.indexOf(obj.describe) === -1) {
+        info.push({ describe: obj.describe });
+      }
+      if (originalInfo.indexOf(obj.type) === -1) {
+        info.push({ type: obj.type });
+      }
+
+      // eslint-disable-next-line
+      const keys = info.map((item) => (Object.keys(item).toString()));
+      // eslint-disable-next-line
+      info.map((element) => {
+        const temp = `${Object.keys(element).toString()}:${Object.values(element).toString()},`;
+        infoString += temp;
+      });
+      await this.axios.post(`${this.$apiPrefix}/modifyAlbumInfo?albumName=${window.encodeURIComponent(this.albumName)}&info=${window.encodeURIComponent(infoString)}`)
+        .then(async (res) => {
+          if (res.status === 200 && res.data === 1) {
+            const index = keys.indexOf('name');
+            if (index !== -1) {
+              await this.move(this.imgArr, info[index].name);
+              this.albumName = info[index].name;
+              this.$route.query.name = info[index].name;
+            }
+          }
+        })
+        .catch((err) => {
+          console.error(err.message);
         });
     },
     back() {
@@ -158,7 +332,7 @@ export default {
 .el-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
 header {
@@ -170,6 +344,11 @@ header {
   float: right;
   padding-top: 20px;
   margin-right: 10px;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  /* color: #ED784A; */
 }
 
 .el-main{
@@ -186,16 +365,42 @@ header {
 }
 
 .el-icon-arrow-left {
-  float: left;
-  line-height: 42px;
-  font-size: 24px;
-  padding-right: 10px;
+    float: left;
+    line-height: 42px;
+    font-size: 20px;
+    padding-right: 10px;
 }
-
+.item {
+  /* border: #333 solid 10px;
+  border-radius: 5px;
+  height: fit-content; */
+}
 .imgItem {
   width: 100%;
-  border-radius: 5px;
+  margin-bottom: -5px;
+  /* border-radius: 5px; */
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, .35), 0 0 6px rgba(0, 0, 0, .35) */
+}
+
+.albums {
+    width: 20%;
+    height: 445px;
+    float: left;
+    padding: 0 20px 10px 20px;
+    margin-top: 10px;
+    margin-right: 15px;
+    border-right: 1px solid #d6d6d6;
+    display: none;
+}
+
+.formInline {
+    transform: scale(0.9);
+    text-align: left;
+    justify-content: start;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    display: none;
 }
 
 .masonry {
@@ -215,8 +420,14 @@ header {
   color: rgb(195, 82, 82);
 } */
 .el-icon-circle-check {
-    padding-top: 22px;
+    padding-top: 25px;
+    padding-right: 10px;
     color: green;
+}
+
+.el-icon-circle-close {
+    padding-top: 25px;
+    color: red;
 }
 
 .item {
@@ -224,16 +435,21 @@ header {
   break-inside: avoid;
   position: relative;
 }
-.delete {
-  height: 30px;
-  /* background: rgb(195, 82, 82); */
-  background: rgba(199, 62, 58, 0.5);
+
+.addToArray, .delete {
+  height: 100%;
+  width: 100%;
+  /* background: rgba(0, 0, 0, 0.3); */
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  width: 100%;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  top: 0px;
+  left: 0px;
+}
+
+.delete {
+  /* background: rgba(199, 62, 58, 0.3); */
+  background: rgba(0, 0, 0, 0.3);
 }
 </style>
