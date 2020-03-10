@@ -344,11 +344,11 @@ header {
   padding: 0 5px;
 }
 .noLocation {
-  height: 95vh;
+  height: 93vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(231, 148, 96, 0.2);
+  /* background: rgba(231, 148, 96, 0.2); */
   border-radius: 5px;
 }
 

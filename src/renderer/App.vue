@@ -69,6 +69,12 @@
   .el-dropdown, .el-header > .settingButtons > i{
     -webkit-app-region: no-drag;
   }
+  .el-dialog__header /deep/ .el-dialog__headerbtn {
+    -webkit-app-region: no-drag;
+  }
+  .el-image-viewer__wrapper /deep/ .el-image-viewer__btn, .el-image-viewer__close {
+    -webkit-app-region: no-drag;
+  }
 
   /* .el-loading-spinner .circular{
     width: 48px;

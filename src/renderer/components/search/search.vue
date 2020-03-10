@@ -116,6 +116,7 @@ export default {
         center: true,
       });
     },
+    handleLoad() {},
     back() {
       this.$router.back(-1);
     },

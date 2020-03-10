@@ -20,16 +20,18 @@
                     </span>
                     <el-dropdown-menu slot="dropdown">
                       <router-link :to="{path: '/upload', query:{name: albumName}}" class="linkToUpload">
-                        <el-dropdown-item icon="el-icon-plus">新增</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-plus">新增相片</el-dropdown-item>
                       </router-link>
-                      <el-dropdown-item icon="el-icon-d-arrow-left" @click.native="showMultiSelect">移动</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-setting" @click.native="showForm">变更</el-dropdown-item>
-                      <el-dropdown-item icon="el-icon-delete" @click.native="showIcons">删除</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-d-arrow-left" @click.native="showMultiSelect">移动相片</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-setting" @click.native="showForm">变更信息</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-refresh" @click.native="showSingleSelect">变更封面</el-dropdown-item>
+                      <el-dropdown-item icon="el-icon-delete" @click.native="showIcons">删除相片</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                   <i v-show="showOrNot" @click="hideIcons" class="el-icon-circle-check"></i>
                   <i v-show="showFormOrNot" @click="hideForm" class="el-icon-circle-check"></i>
                   <i v-show="showMultiSelectOrNot" @click="cancle" class="el-icon-circle-close"></i>
+                  <i v-show="showSingleSelectOrNot" @click="modifyAlbumInfo($event, coverImgUrl), hideSingleSelect($event)" class="el-icon-circle-check"></i>
                 </div>
               </el-header>
 
@@ -39,19 +41,23 @@
                 element-loading-spinner="el-icon-loading"
                 class="waterFallMain"
               >
-                <div class="albums">
+              <transition name="el-fade-in-linear el-zoom-in-center">
+                <div v-show="showMultiSelectOrNot" class="albums">
+                  <el-divider class="divider"><i class="el-icon-files"></i></el-divider>
                   <p
                     v-for="(items, index) of albums"
                     @click="hideMultiSelect($event, items.name)"
                     :key="index"
-                    style="font-size: 11px; padding-top: 15px; cursor: pointer;"
+                    class="alName"
                   >
                     <span>{{items.name}}</span>
                     <el-divider></el-divider>
                   </p>
                 </div>
+              </transition>
 
-                <el-form :inline="true" :model="formInline" size="mini" class="formInline">
+              <transition name="el-fade-in-linear el-zoom-in-top">
+                <el-form v-show="showFormOrNot" :inline="true" :model="formInline" size="mini" class="formInline">
                     <el-form-item label="名称:">
                       <el-input v-model="formInline.name" placeholder="无"></el-input>
                     </el-form-item>
@@ -65,6 +71,7 @@
                       <el-button @click="modifyAlbumInfo($event, formInline)" type="success" round icon="el-icon-check"></el-button>
                     </el-form-item>
                   </el-form>
+              </transition>
 
                 <div class="masonry">
                   <div v-for="(item, index) in imgArr" :key="index" class="item">
@@ -77,8 +84,22 @@
                         <div v-show="showOrNot" @click="deleteFromAlbum(imgArr[index])" class="delete">
                           <i class="el-icon-delete" style="color: #D05A6E; font-size: 32px;"></i>
                         </div>
-                        <div v-show="showMultiSelectOrNot" @click="addToArray(imgArr[index], index)" class="addToArray">
-                          <i class="el-icon-success" style="color: rgba(0, 0, 0, 0); font-size: 32px;"></i>
+
+                        <div v-show="showMultiSelectOrNot" @click="addToArray($event, imgArr[index], index)" class="addToArray">
+                          <i class="el-icon-success multiSelectedCheck" style="font-size: 32px;"></i>
+                        </div>
+
+
+                        <div
+                          v-show="showSingleSelectOrNot"
+                          @click="singleSelect($event, imgArr[index], index)"
+                          :class="{ checked: index === selectedIndex }"
+                          class="singleSelect">
+                          <i
+                            :class="{ successed: index === selectedIndex }"
+                            class="el-icon-success"
+                            style="color: rgba(0, 0, 0, 0); font-size: 32px;"
+                          ></i>
                         </div>
                         <img v-lazy="item" class="imgItem" alt @load="handleLoad" />
                       </el-card>
@@ -105,6 +126,7 @@ export default {
       needToMove: [],
       showOrNot: false,
       showMultiSelectOrNot: false,
+      showSingleSelectOrNot: false,
       showFormOrNot: false,
       albums: [],
       formInline: {
@@ -112,6 +134,8 @@ export default {
         describe: this.$route.query.describe,
         type: this.$route.query.type,
       },
+      selectedIndex: -1,
+      coverImgUrl: '',
       loading: false,
     };
   },
@@ -152,23 +176,31 @@ export default {
     showForm(e) {
       e.preventDefault();
       this.showFormOrNot = true;
-      document.querySelector('.formInline').style.display = 'inline-flex';
+      // document.querySelector('.formInline').style.display = 'inline-flex';
     },
     hideForm(e) {
       e.preventDefault();
       this.showFormOrNot = false;
-      document.querySelector('.formInline').style.display = 'none';
+      // document.querySelector('.formInline').style.display = 'none';
     },
     showMultiSelect(e) {
       e.preventDefault();
       this.showMultiSelectOrNot = true;
-      document.querySelector('.albums').style.display = 'block';
+      // document.querySelector('.albums').style.display = 'block';
     },
     hideMultiSelect(e, albumName) {
       e.preventDefault();
       this.showMultiSelectOrNot = false;
       this.move(this.needToMove, albumName);
-      document.querySelector('.albums').style.display = 'none';
+      // document.querySelector('.albums').style.display = 'none';
+    },
+    showSingleSelect(e) {
+      e.preventDefault();
+      this.showSingleSelectOrNot = true;
+    },
+    hideSingleSelect(e) {
+      e.preventDefault();
+      this.showSingleSelectOrNot = false;
     },
     cancle(e) {
       e.preventDefault();
@@ -231,26 +263,30 @@ export default {
           console.error(err);
         });
     },
-    addToArray(imgUrl, index) {
-      // eslint-disable-next-line
-      event.preventDefault();
-      // eslint-disable-next-line
-      event.stopPropagation();
+    addToArray(e, imgUrl, index) {
+      e.preventDefault();
+      e.stopPropagation();
+
       const classAddToArray = document.querySelectorAll('.addToArray')[index];
-      const checkedIcon = document.querySelectorAll('.el-icon-success')[index];
+      const checkedIcon = document.querySelectorAll('.multiSelectedCheck')[index];
 
       if (classAddToArray.classList.contains('checked')) {
         this.needToMove = this.needToMove.filter(item => item !== imgUrl);
         classAddToArray.classList.remove('checked');
-        classAddToArray.style.background = 'none';
-        checkedIcon.style.color = 'rgba(0, 0, 0, 0)';
+        checkedIcon.classList.remove('successed');
       } else {
         this.needToMove.push(imgUrl);
         classAddToArray.classList.add('checked');
-        classAddToArray.style.background = 'rgba(0, 0, 0, 0.3)';
-        checkedIcon.style.color = 'green';
+        checkedIcon.classList.add('successed');
       }
       return false;
+    },
+    singleSelect(e, imgUrl, index) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      this.selectedIndex = index;
+      this.coverImgUrl = imgUrl;
     },
     async move(urlArr, albumName) {
       this.loading = true;
@@ -275,7 +311,7 @@ export default {
           this.loading = false;
         });
     },
-    async modifyAlbumInfo(e, obj) {
+    async modifyAlbumInfo(e, value) {
       e.preventDefault();
       const originalInfo = [
         this.$route.query.name,
@@ -285,14 +321,18 @@ export default {
       const info = [];
       let infoString = '';
 
-      if (originalInfo.indexOf(obj.name) === -1) {
-        info.push({ name: obj.name });
-      }
-      if (originalInfo.indexOf(obj.describe) === -1) {
-        info.push({ describe: obj.describe });
-      }
-      if (originalInfo.indexOf(obj.type) === -1) {
-        info.push({ type: obj.type });
+      if (typeof (value) === 'object') {
+        if (originalInfo.indexOf(value.name) === -1) {
+          info.push({ name: value.name });
+        }
+        if (originalInfo.indexOf(value.describe) === -1) {
+          info.push({ describe: value.describe });
+        }
+        if (originalInfo.indexOf(value.type) === -1) {
+          info.push({ type: value.type });
+        }
+      } else if (typeof (value) === 'string') {
+        info.push({ avatar: value });
       }
 
       // eslint-disable-next-line
@@ -312,6 +352,7 @@ export default {
               this.$route.query.name = info[index].name;
             }
           }
+          await this.getAlbum();
         })
         .catch((err) => {
           console.error(err.message);
@@ -370,11 +411,7 @@ header {
     font-size: 20px;
     padding-right: 10px;
 }
-.item {
-  /* border: #333 solid 10px;
-  border-radius: 5px;
-  height: fit-content; */
-}
+
 .imgItem {
   width: 100%;
   margin-bottom: -5px;
@@ -390,7 +427,7 @@ header {
     margin-top: 10px;
     margin-right: 15px;
     border-right: 1px solid #d6d6d6;
-    display: none;
+    /* display: none; */
 }
 
 .formInline {
@@ -400,13 +437,32 @@ header {
     display: flex;
     align-items: center;
     margin-top: 15px;
-    display: none;
+    /* display: none; */
 }
 
 .masonry {
   column-count: 3;
   column-gap: 15px;
   margin: 10px 20px;
+}
+
+.alName {
+  font-size: 11px;
+  /* padding-top: 15px; */
+  cursor: pointer;
+  /* text-align: center; */
+}
+
+.alName:hover {
+  color: rgba(144, 179, 234, 0.67);
+}
+
+.el-divider {
+  margin: 15px 0;
+}
+
+.divider {
+  margin: 0 0 25px 0 !important;
 }
 
 .settingButtons {
@@ -436,7 +492,7 @@ header {
   position: relative;
 }
 
-.addToArray, .delete {
+.addToArray, .delete , .singleSelect{
   height: 100%;
   width: 100%;
   /* background: rgba(0, 0, 0, 0.3); */
@@ -449,7 +505,18 @@ header {
 }
 
 .delete {
-  /* background: rgba(199, 62, 58, 0.3); */
+  background: rgba(199, 62, 58, 0.3);
+  /* background: rgba(0, 0, 0, 0.3); */
+}
+
+.checked {
   background: rgba(0, 0, 0, 0.3);
+}
+
+.multiSelectedCheck {
+  color: rgba(0, 0, 0, 0); 
+}
+.successed {
+  color: green !important;
 }
 </style>
