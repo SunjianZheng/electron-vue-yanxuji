@@ -86,6 +86,18 @@ npm run pack
 
 ![](./screenshots/upload.png)
 
+#### 修改相册信息
+
+![](./screenshots/modifyAlbumInfo.png)
+
+#### 更换相册封面
+
+![](./screenshots/changeAlbumCover.png)
+
+#### 移动相片到其它相册
+
+![](./screenshots/moveToAnotherAlbum.png)
+
 #### 删除相片
 
 ![](./screenshots/deleteImg.png)
@@ -94,17 +106,21 @@ npm run pack
 
 ### 图片详情页
 
-#### 存在`exif`元信息并存在`GPS`标记
+#### 存在`exif`元信息
 
-![](./screenshots/haveExifAndGPSInfo.png)
+![](./screenshots/haveExifInfo.png)
 
-#### 存在`exif`元信息但不存在`GPS`标记
+#### 存在`GPS`标记
 
-![](./screenshots/haveExifButNoGPSInfo.png)
+![](./screenshots/haveGPSInfo.png)
 
 #### 无`exif`元信息
 
 ![](./screenshots/noExifInfo.png)
+
+#### 无GPS信息
+
+![](./screenshots/haveNoGPSInfo.png)
 
 #### 点击预览原图
 
@@ -141,18 +157,16 @@ npm run pack
 ### 推荐页
 
 > 点击图片可进入图片详情页
+>
+> 按各个年度生成相册
+>
+> 按各个城市生成相册
 
 ![](./screenshots/recommend.png)
 
 
 
 ### 往年今日页
-
-#### 若有记录
-
-![](./screenshots/thisDayInPastYears.png)
-
-#### 若无记录
 
 ![](./screenshots/!thisDayInPastYears.png)
 
