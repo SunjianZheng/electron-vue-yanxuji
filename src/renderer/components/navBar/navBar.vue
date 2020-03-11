@@ -91,16 +91,18 @@
     height: 100%;
   }
   .el-menu {
-    height: 100%;
+    /* height: 100%; */
     background: rgba(0,0,0,0);
     border: none;
   }
   .background {
     width: 100%;
     height: 100%;
-    background-size: cover;
+    /* background-size: cover;
     background-image: url('./../../assets/background.jpg');
-    filter: blur(150px);
+    filter: blur(150px); */
+    /* background: linear-gradient(to bottom, #D7B49A 0%, #E2D1CA 100%); */
+    background: linear-gradient(to bottom, #e5b592 0%, #ddd2ce 100%);
     z-index: -1;
     position: absolute;
     top: 0;

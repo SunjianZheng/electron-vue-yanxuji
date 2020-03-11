@@ -10,13 +10,15 @@
               菜单<i class="el-icon-setting el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <router-link to="/createAlbum" class="linkToCreateAlbum">
-                <el-dropdown-item icon="el-icon-plus">新增</el-dropdown-item>
-              </router-link>
+              <!-- <router-link to="/createAlbum" class="linkToCreateAlbum"> -->
+                <el-dropdown-item icon="el-icon-plus" @click.native="showForm">新增</el-dropdown-item>
+              <!-- </router-link> -->
               <el-dropdown-item icon="el-icon-delete" @click.native="showIcons">删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <i v-show="showOrNot" @click="hideIcons" class="el-icon-circle-check"></i>
+          <i v-show="showFormOrNot" @click="hideForm" class="el-icon-circle-close"></i>
+          <!-- <i v-show="showFormOrNot" @click="hideForm" class="el-icon-circle-check"></i> -->
         </div>
       </header>
     </el-header>
@@ -26,6 +28,25 @@
       element-loading-text="加载中..."
       element-loading-spinner="el-icon-loading"
     >
+      <transition name="el-fade-in-linear el-zoom-in-top">
+                <el-form v-show="showFormOrNot" :inline="true" :model="formInline" size="mini" class="formInline">
+                    <el-form-item label="名称:">
+                      <el-input v-model="formInline.name" placeholder="无"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述:">
+                      <el-input v-model="formInline.describe" placeholder="无"></el-input>
+                    </el-form-item>
+                    <el-form-item label="类型:">
+                      <el-input v-model="formInline.type" placeholder="无"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button @click="submit($event)" type="success" round icon="el-icon-check"></el-button>
+                    </el-form-item>
+                    <!-- <el-form-item>
+                      <el-button @click="reset($event)" type="warning" round icon="el-icon-check"></el-button>
+                    </el-form-item> -->
+                  </el-form>
+              </transition>
       <el-row v-if="isOnline && albums">
         <el-col :span="8" v-for="(items, index) of albums" :key="index" :offset="index > 0 ? 6 : 0">
             <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -82,7 +103,13 @@ export default {
       albums: {},
       currentDate: new Date(),
       showOrNot: false,
+      showFormOrNot: false,
       loading: false,
+      formInline: {
+        name: '',
+        describe: '',
+        type: '',
+      },
     };
   },
   created() {
@@ -119,6 +146,44 @@ export default {
     hideIcons(e) {
       e.preventDefault();
       this.showOrNot = false;
+    },
+    showForm(e) {
+      e.preventDefault();
+      this.showFormOrNot = true;
+    },
+    hideForm(e) {
+      e.preventDefault();
+      this.showFormOrNot = false;
+      this.reset();
+    },
+    async submit(e) {
+      e.preventDefault();
+      await this.axios.post(`${this.$apiPrefix}/createAlbum`, null, {
+        params: {
+          name: this.formInline.name,
+          describe: this.formInline.describe,
+          type: this.formInline.type,
+        },
+      })
+        .then((res) => {
+          this.showFormOrNot = false;
+          this.linkToUpload();
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    },
+    reset() {
+      this.$refs.formInline.resetFields();
+    },
+    linkToUpload() {
+      this.$router.push({
+        path: '/upload',
+        query: {
+          name: this.formInline.name,
+        },
+      });
     },
     async deleteAlbum(name) {
       this.loading = true;
@@ -195,6 +260,16 @@ header {
   margin-bottom: 15px;
 }
 
+.formInline {
+    transform: scale(0.9);
+    text-align: left;
+    justify-content: start;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    /* display: none; */
+}
+
 .el-card {
   width: 185px;
   height: 265px;
@@ -251,9 +326,15 @@ header {
 }
 
 .el-icon-circle-check {
-  padding-top: 24px;
+  padding-top: 22px;
   color: green;
   -webkit-app-region: no-drag;
+}
+
+.el-icon-circle-close {
+    padding-top: 22px;
+    color: red;
+    -webkit-app-region: no-drag;
 }
 
 .item {

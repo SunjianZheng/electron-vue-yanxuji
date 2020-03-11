@@ -492,6 +492,10 @@ header {
   position: relative;
 }
 
+.item:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 0 6px rgba(0, 0, 0, 0);
+}
+
 .addToArray, .delete , .singleSelect{
   height: 100%;
   width: 100%;

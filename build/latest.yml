@@ -1,8 +1,8 @@
 version: 1.0.0
 files:
   - url: yanxuji-setup-1.0.0.exe
-    sha512: rL8fyB/0UyUSxYmmHkHu64i4ykBSNBUr37IxmikXBv2kJDKg6KndryQeb9+Y2SD+rGrf65R6BZsKDFoewpi7ag==
-    size: 40907611
+    sha512: lgzZOCF+gT7K2T2savDKbdxHgEv5SVDBjObFRZEQBMzF7I9tdMatMmeYEy53XggCvzalM4y0DnvB7/jbgN4YwA==
+    size: 39373292
 path: yanxuji-setup-1.0.0.exe
-sha512: rL8fyB/0UyUSxYmmHkHu64i4ykBSNBUr37IxmikXBv2kJDKg6KndryQeb9+Y2SD+rGrf65R6BZsKDFoewpi7ag==
-releaseDate: '2020-03-10T14:08:49.190Z'
+sha512: lgzZOCF+gT7K2T2savDKbdxHgEv5SVDBjObFRZEQBMzF7I9tdMatMmeYEy53XggCvzalM4y0DnvB7/jbgN4YwA==
+releaseDate: '2020-03-11T13:37:07.718Z'
