@@ -11,7 +11,7 @@
           <img src="./../../assets/logo1.png" class="image" style="padding: 10px;">
           <div style="padding: 14px; text-align: center;">
             <div class="bottom clearfix">
-              <p class="intro" style="padding: 0 10px 10px 10px;">炎序之意为盛夏</p>
+              <p class="intro" style="padding: 0 10px 10px 10px;">炎序之意为盛夏时序</p>
               <p class="mainIntro">愿沿途风景与我之回忆在盛夏永存</p>
               <div class="author" @click="linkToGitHub">
                 <i class="el-icon-right" style="font-size: 24px; padding-right: 10px; color: #D0104C;"></i>
@@ -37,7 +37,7 @@ export default {
   methods: {
     linkToGitHub() {
       // eslint-disable-next-line
-      shell.openExternal('hhttps://github.com/SunjianZheng/electron-vue-yanxuji');
+      shell.openExternal('https://github.com/SunjianZheng/electron-vue-yanxuji');
     },
     back() {
       this.$router.back(-1);
