@@ -69,6 +69,7 @@ npm run pack
 - [ ] 登录/注册
 - [ ] 社交平台分享
 - [ ] 好友分享
+- [x] nedb, vuex 缓存, 减少接口调用
 
 ## 界面预览
 
@@ -76,7 +77,9 @@ npm run pack
 
 ![](./screenshots/mainPage.png)
 
+> 暗黑模式
 
+![](./screenshots/darkMode.png)
 
 ### 相册详情页
 
@@ -87,14 +90,6 @@ npm run pack
 > 使用`element-ui`的`el-upload`标签
 
 ![](./screenshots/upload.png)
-
-#### 修改相册信息
-
-![](./screenshots/modifyAlbumInfo.png)
-
-#### 更换相册封面
-
-![](./screenshots/changeAlbumCover.png)
 
 #### 移动相片到其它相册
 
@@ -108,17 +103,11 @@ npm run pack
 
 ### 图片详情页
 
-![](./screenshots/haveExifInfo.png)
+![](./screenshots/photoDetails.png)
+
+![](./screenshots/photoDetails2.png)
 
 ![](./screenshots/haveGPSInfo.png)
-
-#### 点击预览原图
-
-![](./screenshots/fullSizePreview.png)
-
-#### 原图下载
-
-![](./screenshots/saveFullSizeImg.png)
 
 
 
@@ -127,6 +116,8 @@ npm run pack
 > 目前只支持搜寻`时间`和`地点`
 >
 > 点击图片可进入`图片详情页
+
+![](./screenshots/searchPage.png)
 
 #### 搜寻时间
 
@@ -139,6 +130,8 @@ npm run pack
 > 可具体 例如 `福建省厦门市思明区鹭江街道鹭江道`
 
 ![](./screenshots/searchByLocation.png)
+
+![](./screenshots/noSearchResult.png)
 
 
 
