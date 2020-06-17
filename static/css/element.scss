@@ -1,0 +1,46 @@
+@import './layout.scss';
+
+@mixin yanxujiHeader($direction: 'block', $haveTille: true, $haveDropDownMenu: true, $padding-top: 10px, $height:60px, $color:#333, $fontSize:20px) {
+  // @include flex($direction);
+
+  // width: 100vw;
+  height: $height;
+  padding-top: $padding-top;
+  line-height: $height;
+  // margin: 5px 45px 0 45px;
+
+  i {
+    -webkit-app-region: no-drag;
+  }
+
+  .el-icon-arrow-left {
+    // display: if($haveTille==true, block, none);\
+    height: $height;
+    line-height: $height;
+    font-size: $fontSize;
+  }
+  span {
+    height: $height;
+    line-height: $height;
+    font-size: $fontSize;
+  }
+  .el-dropdown,
+  .btns,
+  .inputBox {
+    // display: if($haveDropDownMenu==true, block, none);
+    float: right;
+    // margin-right: 10px;
+    line-height: 60px;
+    margin-right: 20px;
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+  }
+  .el-dropdown-menu {
+    border: none;
+  }
+
+  .el-dropdown-link {
+    font-size: 14px;
+    cursor: pointer;
+  }
+}

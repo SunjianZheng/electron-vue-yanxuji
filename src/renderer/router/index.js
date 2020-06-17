@@ -4,96 +4,72 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
-  mode: 'hash',
+  mode: 'history',
   routes: [
     {
       path: '*',
       redirect: '/',
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
+      meta: {},
     },
     {
       path: '/',
       name: 'landing-page',
-      component: require('@/components/LandingPage').default,
-      meta: {
-        keepAlive: true,
-        isBack: false,
-      },
+      component: require('@pages/LandingPage').default,
+      meta: {},
     },
     {
       path: '/photoCollections',
       name: 'photoCollections',
-      component: require('@/components/photoCollections/photoCollections').default,
-      meta: {
-        keepAlive: true,
-        isBack: false,
-      },
+      component: require('@pages/PhotoCollections').default,
+      meta: {},
     },
     {
       path: '/photoDetails',
       name: 'photoDetails',
-      component: require('@/components/photoDetails/photoDetails').default,
-      meta: {
-        keepAlive: true,
-        isBack: false,
-      },
+      component: require('@pages/photo_details/PhotoDetails').default,
+      meta: {},
     },
     {
       path: '/upload',
       name: 'upload',
-      component: require('@/components/upload').default,
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
-    },
-    {
-      path: '/createAlbum',
-      name: 'createAlbum',
-      component: require('@/components/createAlbum').default,
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
+      component: require('@pages/Upload').default,
+      meta: {},
     },
     {
       path: '/search',
       name: 'search',
-      component: require('@/components/search/search').default,
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
+      component: require('@pages/Search').default,
+      meta: {},
     },
     {
-      path: '/recommand',
-      name: 'recommand',
-      component: require('@/components/recommand/recommand').default,
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
+      path: '/recommend',
+      name: 'recommend',
+      component: require('@pages/Recommend').default,
+      meta: {},
     },
     {
       path: '/about',
       name: 'about',
-      component: require('@/components/about/about').default,
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
+      component: require('@pages/About').default,
+      meta: {},
     },
     {
       path: '/thisDayInPastYears',
       name: 'thisDayInPastYears',
-      component: require('@/components/thisDayInPastYears/thisDayInPastYears').default,
-      meta: {
-        keepAlive: false,
-        isBack: false,
-      },
+      component: require('@pages/ThisDayInPastYears').default,
+      meta: {},
     },
+    // {
+    //   path: '/netError',
+    //   name: 'netError',
+    //   component: require('@components/NetError').default,
+    //   meta: {},
+    // },
   ],
+  // scrollBehavior() {
+  //   return {
+  //     x: 0,
+  //     y: 0,
+  //   };
+  // },
 });

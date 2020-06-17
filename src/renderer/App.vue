@@ -1,44 +1,64 @@
 <template>
-  <!-- <div id="app" :style="{height: Height}"> -->
-  <div id="app">
-    <!-- <keep-alive>
-      <router-view></router-view>
-    </keep-alive> -->
-    <el-container>
-      <el-aside width="25%" style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);">
-        <!-- <keep-alive> -->
-          <nav-bar></nav-bar>
-        <!-- </keep-alive> -->
+    <el-container id="app">
+      <el-aside width="25%">
+        <Navbar />
       </el-aside>
-      <el-main>
-        <el-container>
+
+      <el-container 
+        class="app-background"
+        style="
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          width: 75%;
+          overflow-y: auto;"
+      >
+        <el-main>
+          <keep-alive>
           <transition name="fade-transform" mode="out-in">
             <router-view></router-view>
           </transition>
-        </el-container>
-      </el-main>
+          </keep-alive>
+        </el-main>
+      </el-container>
+      
     </el-container>
-  </div>
 </template>
 
 <script>
-  import NavBar from './components/navBar/navBar';
+  import showNotifications from '@utils/notifications';
+  import Navbar from './components/navbar/Navbar';
+
   export default {
     name: 'yanxuji',
-    components: { NavBar },
+    components: { Navbar },
     data() {
       return {
       };
     },
+    beforeMount() {
+    },
     mounted() {
+      window.addEventListener('online', () => {
+        this.$store.commit('App/setOnline', true);
+        showNotifications({ title: '网络已连接!' });
+      });
+      window.addEventListener('offline', () => {
+        this.$store.commit('App/setOnline', false);
+        showNotifications({ title: '网络无连接!', type: 'error' });
+      });
     },
     watch: {
     },
   };
 </script>
 
-<style>
+<style lang="scss">
+  // @import './assets/css/reset.scss';
   *{
+    margin: 0;
+    padding: 0;
     scroll-behavior: smooth;
     text-decoration: none;
     -webkit-touch-callout:none;
@@ -50,6 +70,10 @@
   
   ::-webkit-scrollbar { 
     display: none; 
+  }
+
+  .el-main{
+    padding: 0px;
   }
 
   input{  
@@ -149,21 +173,21 @@
     opacity: 0;
   }
 
-  /* fade-transform */
-  .fade-transform-leave-active,
-  .fade-transform-enter-active {
-    transition: all .5s;
-  }
+  // /* fade-transform */
+  // .fade-transform-leave-active,
+  // .fade-transform-enter-active {
+  //   transition: all .5s;
+  // }
 
-  .fade-transform-enter {
-    opacity: 0;
-    /* transform: translateX(-30px); */
-  }
+  // .fade-transform-enter {
+  //   opacity: 0;
+  //   /* transform: translateX(-30px); */
+  // }
 
-  .fade-transform-leave-to {
-    opacity: 0;
-    /* transform: translateX(30px); */
-  }
+  // .fade-transform-leave-to {
+  //   opacity: 0;
+  //   /* transform: translateX(30px); */
+  // }
 
   /* breadcrumb transition */
   .breadcrumb-enter-active,

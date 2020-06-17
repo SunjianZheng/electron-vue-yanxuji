@@ -31,6 +31,7 @@ function createWindow() {
     skipTaskbar: false,
     autoHideMenuBar: true,
     frame: false,
+    // transparent: true,
     title: '炎序集',
   });
   mainWindow.loadURL(winURL);
